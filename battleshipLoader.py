@@ -32,10 +32,13 @@ class Ship:
         for i in range(SHIP_SIZE):
             grid[self.coordinates[i]['row']][self.coordinates[i]['column']] = 1
         # print(grid)
-        self.health = [["*"] * SHIP_SIZE]
+        self.health = ["*" * SHIP_SIZE]
     
-    def change_health(self):
-        pass
+    def change_health(self, input_cord):
+        for i in range(self.size):
+            if((self.coordinates[i]["row"] == input_cord['row']) and (self.coordinates[i]["column"] == input_cord['column'])):
+                self.health[i] = "#"
+        print(self.health)
 
 def print_board():
     border = 64
@@ -65,13 +68,16 @@ def check_input(input_cord):
     max_hits = SHIP_SIZE * NO_OF_SHIPS
     chances[0] += 1
     for ship in ship_list:
-        for i in range(len(ship.size)):
+        for i in range(ship.size):
             if((ship.coordinates[i]["row"] == input_cord['row']) and (ship.coordinates[i]["column"] == input_cord['column'])):
                 print("HIT!!!") 
                 board[input_cord["row"]][input_cord["column"]] = "#"
                 print_board()
                 hits[0] += 1
-                break
+                for temp_ship in ship_list:
+                    (temp_ship.change_health(input_cord))
+                # use return
+                
         
 
         # if(grid[input_cord["row"]][input_cord["column"]] == 1):
@@ -83,10 +89,10 @@ def check_input(input_cord):
     print("MISS...")
     board[input_cord["row"]][input_cord["column"]] = "."
     print_board()
-    break
+    
     if(hits[0] == max_hits):
         fin()
-    else:
+    else: 
         get_input()
     
     
@@ -102,6 +108,7 @@ def get_input():
         else:
             check_input(input_cord)
             break
+
 
 
 def check_location(location, orientation):
@@ -150,8 +157,8 @@ for ship in range(NO_OF_SHIPS):
     print(location['column'])
     print(orientation)
 # print_board()
+for i in ship_list:
+    print(i.coordinates)
 print(grid)
 print_board()
 get_input()
-
-
