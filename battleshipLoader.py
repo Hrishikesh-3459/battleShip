@@ -2,7 +2,7 @@ from random import randint
 # from ship import Ship
 COL_SIZE = 10
 ROW_SIZE = 10
-NO_OF_SHIPS = 3
+NO_OF_SHIPS = 5
 SHIP_SIZE = 4
 hits = [] # total number of hits
 hits.append(0)
@@ -32,7 +32,10 @@ class Ship:
         for i in range(SHIP_SIZE):
             grid[self.coordinates[i]['row']][self.coordinates[i]['column']] = 1
         # print(grid)
-
+        self.health = [["*"] * SHIP_SIZE]
+    
+    def change_health(self):
+        pass
 
 def print_board():
     border = 64
@@ -58,21 +61,29 @@ def print_board():
     print()
 
 
-def check_input(a):
-    max_hits = 12
+def check_input(input_cord):
+    max_hits = SHIP_SIZE * NO_OF_SHIPS
     chances[0] += 1
-    for i in range(len(grid)):
-        if(grid[a[0]][a[1]] == 1):
-            print("HIT!!!") 
-            board[a[0]][a[1]] = "#"
-            print_board()
-            hits[0] += 1
-            break
-        else:
-            print("MISS...")
-            board[a[0]][a[1]] = "."
-            print_board()
-            break
+    for ship in ship_list:
+        for i in range(len(ship.size)):
+            if((ship.coordinates[i]["row"] == input_cord['row']) and (ship.coordinates[i]["column"] == input_cord['column'])):
+                print("HIT!!!") 
+                board[input_cord["row"]][input_cord["column"]] = "#"
+                print_board()
+                hits[0] += 1
+                break
+        
+
+        # if(grid[input_cord["row"]][input_cord["column"]] == 1):
+        #     print("HIT!!!") 
+        #     board[input_cord["row"]][input_cord["column"]] = "#"
+        #     print_board()
+        #     hits[0] += 1
+        #     break
+    print("MISS...")
+    board[input_cord["row"]][input_cord["column"]] = "."
+    print_board()
+    break
     if(hits[0] == max_hits):
         fin()
     else:
@@ -80,12 +91,17 @@ def check_input(a):
     
     
 def get_input():
-    a = []
-    inp_row = int(input("Enter the row coordinate:  "))
-    a.append(inp_row)
-    inp_col = int(input("Enter the column coordinate:  "))
-    a.append(inp_col)
-    check_input(a)
+    while True:
+        input_cord = {}
+        inp_row = int(input("Enter the row coordinate:  "))
+        input_cord["row"] = inp_row
+        inp_col = int(input("Enter the column coordinate:  "))
+        input_cord["column"] = inp_col
+        if(board[inp_row][inp_col] is not "*"):
+            print("oops.. input already given. Enter new coordinates")
+        else:
+            check_input(input_cord)
+            break
 
 
 def check_location(location, orientation):
@@ -130,9 +146,9 @@ ship_list = []
 for ship in range(NO_OF_SHIPS):
     [location, orientation] = get_location()
     ship_list.append(Ship(location, orientation, SHIP_SIZE))
-    # print(location['row'])
-    # print(location['column'])
-    # print(orientation)
+    print(location['row'])
+    print(location['column'])
+    print(orientation)
 # print_board()
 print(grid)
 print_board()
