@@ -1,8 +1,9 @@
 from random import randint
+import sys
 COL_SIZE = 10
 ROW_SIZE = 10
 NO_OF_SHIPS = 3
-# NO_OF_SHIPS = int(input("Enter the total number of ships  "))
+NO_OF_SHIPS = int(input("Enter the total number of ships  "))
 SHIP_SIZE = 4
 hits = [] 
 hits.append(0)
@@ -50,11 +51,13 @@ def intro():
     st = "Welcome to battleship game"
     ste = st.center(full_line, "-")
     print(ste)
-    # NO_OF_SHIPS = int(input("Enter the total number of ships"))
+    # NO_OF_SHIPS = int(input("Enter the total number of ships  "))
+    print("Number of ships = ", NO_OF_SHIPS)
     print("Ship Size = ", SHIP_SIZE, "x 1")
     print(" '*' indicate unexplored coordinates")
     print(" 'H' indicates hits")
     print(" 'M' indicates misses")
+    print("The ships are either horizontal or vertical,\nThey are not diagonal.")
     print("Sink Them All!")
     print("Good Luck!")
 
@@ -159,14 +162,14 @@ def fin():
     for i in range(full_line):
         print("-", end = "")
     print()
-    exit()
+    sys.exit()
 
 
 ship_list = []
 for ship in range(NO_OF_SHIPS):
     [location, orientation] = get_location()
     ship_list.append(Ship(location, orientation, SHIP_SIZE))
-print(grid)
+# print(grid)
 intro()
 print_board()
 get_input()
