@@ -1,26 +1,24 @@
 from random import randint
-# from ship import Ship
 COL_SIZE = 10
 ROW_SIZE = 10
-NO_OF_SHIPS = 5
+NO_OF_SHIPS = 3
 SHIP_SIZE = 4
-hits = [] # total number of hits
+hits = [] 
 hits.append(0)
-chances = [] # total number of chances
+chances = [] 
 chances.append(0)
 full_line = 190
-st = "Welcome to battleship game"
-ste = st.center(full_line, "-")
-print(ste)
+ship_no = []
+ship_no.append(0)
 grid = [[0] * COL_SIZE for j in range(ROW_SIZE)]
 board = [["*"] * COL_SIZE for j in range(ROW_SIZE)]
 
 
 class Ship:
-    
     def __init__(self, location, orientation, SHIP_SIZE):
         self.size = SHIP_SIZE
         self.orientation = orientation
+        self.numb = 1
         if(self.orientation == "Vertical"):
             self.coordinates = []
             for i in range(SHIP_SIZE):
@@ -31,14 +29,32 @@ class Ship:
                 self.coordinates.append({'row': location['row'], 'column': location['column'] + i})
         for i in range(SHIP_SIZE):
             grid[self.coordinates[i]['row']][self.coordinates[i]['column']] = 1
-        # print(grid)
-        self.health = ["*" * SHIP_SIZE]
+        self.health = ["*"] * SHIP_SIZE
+    
+    # def check_health(self):
+    #     if("*" not in self.health):
+    #         print("Ship Sunk")
     
     def change_health(self, input_cord):
         for i in range(self.size):
             if((self.coordinates[i]["row"] == input_cord['row']) and (self.coordinates[i]["column"] == input_cord['column'])):
-                self.health[i] = "#"
-        print(self.health)
+                self.health[i] = "H"
+        if("*" not in self.health):
+            print("Ship Sunk")
+        # self.check_health()
+    
+    
+def intro():
+    st = "Welcome to battleship game"
+    ste = st.center(full_line, "-")
+    print(ste)
+    print("Number of ships = " , NO_OF_SHIPS)
+    print("Ship Size = ", SHIP_SIZE, "x 1")
+    print(" '*' indicate unexplored coordinates")
+    print(" 'H' indicates hits")
+    print(" 'M' indicates misses")
+    print("Sink Them All!")
+    print("Good Luck!")
 
 def print_board():
     border = 64
@@ -64,37 +80,37 @@ def print_board():
     print()
 
 
-def check_input(input_cord):
+def validate(input_cord):
+    To_avoid_error = 0
     max_hits = SHIP_SIZE * NO_OF_SHIPS
     chances[0] += 1
     for ship in ship_list:
         for i in range(ship.size):
             if((ship.coordinates[i]["row"] == input_cord['row']) and (ship.coordinates[i]["column"] == input_cord['column'])):
                 print("HIT!!!") 
-                board[input_cord["row"]][input_cord["column"]] = "#"
+                board[input_cord["row"]][input_cord["column"]] = "H"
                 print_board()
                 hits[0] += 1
                 for temp_ship in ship_list:
-                    (temp_ship.change_health(input_cord))
-                # use return
-                
-        
-
-        # if(grid[input_cord["row"]][input_cord["column"]] == 1):
-        #     print("HIT!!!") 
-        #     board[input_cord["row"]][input_cord["column"]] = "#"
-        #     print_board()
-        #     hits[0] += 1
-        #     break
-    print("MISS...")
-    board[input_cord["row"]][input_cord["column"]] = "."
-    print_board()
+                    temp_ship.change_health(input_cord)
+                To_avoid_error = 100
+    if(To_avoid_error != 100):
+        print("MISS...")
+        board[input_cord["row"]][input_cord["column"]] = "M"
+        print_board()
     
     if(hits[0] == max_hits):
         fin()
     else: 
         get_input()
     
+    
+def check_input(input_cord):
+    if(board[input_cord["row"]][input_cord["column"]] !=  "*"):
+            print("oops.. input already given. Enter new coordinates")
+            get_input()
+    else:
+        validate(input_cord)
     
 def get_input():
     while True:
@@ -103,11 +119,7 @@ def get_input():
         input_cord["row"] = inp_row
         inp_col = int(input("Enter the column coordinate:  "))
         input_cord["column"] = inp_col
-        if(board[inp_row][inp_col] is not "*"):
-            print("oops.. input already given. Enter new coordinates")
-        else:
-            check_input(input_cord)
-            break
+        check_input(input_cord)
 
 
 
@@ -145,20 +157,14 @@ def fin():
     for i in range(full_line):
         print("-", end = "")
     print()
+    exit()
 
 
-# print_board()
-# get_input()
 ship_list = []
 for ship in range(NO_OF_SHIPS):
     [location, orientation] = get_location()
     ship_list.append(Ship(location, orientation, SHIP_SIZE))
-    print(location['row'])
-    print(location['column'])
-    print(orientation)
-# print_board()
-for i in ship_list:
-    print(i.coordinates)
 print(grid)
+intro()
 print_board()
 get_input()
