@@ -2,6 +2,7 @@ from random import randint
 COL_SIZE = 10
 ROW_SIZE = 10
 NO_OF_SHIPS = 3
+# NO_OF_SHIPS = int(input("Enter the total number of ships  "))
 SHIP_SIZE = 4
 hits = [] 
 hits.append(0)
@@ -40,7 +41,8 @@ class Ship:
             if((self.coordinates[i]["row"] == input_cord['row']) and (self.coordinates[i]["column"] == input_cord['column'])):
                 self.health[i] = "H"
         if("*" not in self.health):
-            print("Ship Sunk")
+            print("Ship Sunk!!!")
+            self.health = ["*"] * SHIP_SIZE
         # self.check_health()
     
     
@@ -48,7 +50,7 @@ def intro():
     st = "Welcome to battleship game"
     ste = st.center(full_line, "-")
     print(ste)
-    print("Number of ships = " , NO_OF_SHIPS)
+    # NO_OF_SHIPS = int(input("Enter the total number of ships"))
     print("Ship Size = ", SHIP_SIZE, "x 1")
     print(" '*' indicate unexplored coordinates")
     print(" 'H' indicates hits")
