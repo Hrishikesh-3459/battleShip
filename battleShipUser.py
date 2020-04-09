@@ -54,7 +54,7 @@ class battleShipUser:
 
     def check_input(self, input_cord):
         if(self.board[input_cord["row"]][input_cord["column"]] != "*"):
-            print("oops.. input already given. Enter new coordinates")
+            print("Oops.. input already given. Enter new coordinates")
             return False
         else:
             return True
@@ -71,8 +71,10 @@ class battleShipUser:
                     return input_cord
                 else:
                     continue
-            except TypeError:
-                print("\nPlease enter a number")
+            except (TypeError, ValueError):
+                print("Oops!  That was not a valid number.  Try again...")
+            except (IndexError):
+                print("Oops!  That was out of limits.  Try again...")
 
     def validate(self, input_cord):
         FLAG = False
@@ -84,7 +86,7 @@ class battleShipUser:
                     print("HIT!!!")
                     FLAG = True
         if(FLAG == False):
-            self.board[input_cord["row"]][input_cord["column"]] = "."
+            self.board[input_cord["row"]][input_cord["column"]] = "-"
             print_board(self.board)
             print("MISS...")
 

@@ -1,7 +1,7 @@
 import sys
 import os
 
-from battleShipUser import battleShipUser
+from battleShipUser import *
 from itertools import cycle
 
 COL_SIZE = 10
@@ -33,21 +33,32 @@ global NO_OF_USERS
 
 
 def intro():
+    Board = [["*"] * COL_SIZE for j in range(ROW_SIZE)]
     st = "Welcome to battleship game"
     ste = st.center(FULL_LINE, "-")
     print(ste)
-    NO_OF_USERS = int(input("Enter number of players: "))
-    NO_OF_SHIPS = int(
-        input("Enter the total number of ships (Max input limit 8): "))
-    # NO_OF_SHIPS = int(input("Enter the total number of ships  "))
+    while True:
+        try:
+            NO_OF_USERS = int(input("Enter number of players: "))
+            break
+        except ValueError:
+            print("Oops!  That was not a valid number.  Try again...")
+    while True:
+        try:
+            NO_OF_SHIPS = int(
+                input("Enter the total number of ships (Max input limit 8): "))
+            break
+        except ValueError:
+            print("Oops!  That was not a valid number.  Try again...")
     print("Number of ships = ", NO_OF_SHIPS)
     # print("Ship Size = ", SHIP_SIZE)
     print(" '*' indicate unexplored coordinates")
     print(" 'H' indicates hits")
-    print(" 'M' indicates misses")
+    print(" '-' indicates misses")
     print("The ships are either horizontal or vertical,\nThey are not diagonal.")
     print("Sink Them All!")
     print("Good Luck!")
+    print_board(Board)
     return [NO_OF_SHIPS, NO_OF_USERS]
 
 
@@ -59,6 +70,7 @@ user_list = []
 
 for user in range(NO_OF_USERS):
     user_list.append(battleShipUser(NO_OF_SHIPS))
+
 
 # for dramu in range(NO_OF_USERS):
 #     POS_INDICATOR = 10
@@ -74,25 +86,11 @@ for user in range(NO_OF_USERS):
 #         k += 1
 
 
-# POS_INDICATOR = 10
-# for i in range(POS_INDICATOR):
-#     print("   |", i, end="")
-# print("   |")
-# k = 0
-# for i in range(ROW_SIZE):
-#     print(k, end="")
-#     for j in range(COL_SIZE):
-#         print("  |  " + str(user_list[1].grid[i][j]), end="")
-#     print("  |")
-#     k += 1
-
-# print(user_list[0].ship_list)
 iterator = cycle(range(NO_OF_USERS))
 player = next(iterator)
 while True:
     print("Player {0}".format(int(player) + 1))
     input_cord = user_list[player].get_input()
-    # os.system('clear')
     user_list[player].chances += 1
     user_list[player].validate(input_cord)
     for temp_ship in user_list[player].ship_list:
