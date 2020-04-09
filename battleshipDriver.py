@@ -2,6 +2,7 @@ import sys
 import os
 
 from battleShipUser import battleShipUser
+from itertools import cycle
 
 COL_SIZE = 10
 ROW_SIZE = 10
@@ -14,104 +15,30 @@ FULL_LINE = 190
 grid = [[0] * COL_SIZE for j in range(ROW_SIZE)]
 board = [["*"] * COL_SIZE for j in range(ROW_SIZE)]
 
-# def print_board(board):
-#     BORDER = 64
-#     POS_INDICATOR = 10
-#     for i in range(FULL_LINE):
-#         print("-", end = "")
-#     print()
-#     for i in range(BORDER):
-#         print("_", end = "")
-#     print()
-#     k = 0
-#     for i in range(POS_INDICATOR): 
-#         print("   |" , i , end = "")
-#     print("   |")
-#     for i in range(ROW_SIZE):
-#         print(k, end="")
-#         for j in range(COL_SIZE):
-#             print("  |  " + board[i][j] , end = "")
-#         print("  |")
-#         k += 1
-#     for i in range(BORDER):
-#         print("_", end = "")
-#     print()
 
-
-# def validate(input_cord):
-#     # max_hits = SHIP_SIZE * NO_OF_SHIPS
-#     FLAG = False
-#     for ship in ship_list:
-#         for i in range(ship.size):
-#             if((ship.coordinates[i]["row"] == input_cord['row']) and (ship.coordinates[i]["column"] == input_cord['column'])):
-#                 board[input_cord["row"]][input_cord["column"]] = "H"
-#                 print_board()
-#                 print("HIT!!!") 
-#                 FLAG = True
-#     if(FLAG == False):
-#         board[input_cord["row"]][input_cord["column"]] = "."
-#         print_board()
-#         print("MISS...")
-
-# def check_game_status(ship_list):
-#     GAME_OVER = True
-#     for ship in ship_list:
-#         if(ship.sunk == False):
-#             GAME_OVER = False    
-#     return GAME_OVER
-    
-# def check_input(input_cord):
-#     if(board[input_cord["row"]][input_cord["column"]] !=  "*"):
-#         print("oops.. input already given. Enter new coordinates")
-#         return False
-#     else:
-#         return True
-    
-# def get_input():
-#     while True:
-#         input_cord = {}
-#         inp_row = int(input("Enter the row coordinate:  "))
-#         input_cord["row"] = inp_row
-#         inp_col = int(input("Enter the column coordinate:  "))
-#         input_cord["column"] = inp_col
-#         if(check_input(input_cord)):
-#             return input_cord
-#         else:
-#             continue
-
-
-# def get_location():
-#     while True:
-#         location = {}
-#         location['row'] = randint(0, ROW_SIZE - SHIP_SIZE)
-#         location['column'] = randint(0, COL_SIZE - SHIP_SIZE)
-#         orientation = "Vertical" if randint(0,1) == 0 else "Horizontal"
-#         result = check_location(location, orientation)
-#         if(result):
-#             return [location, orientation]
-#         else:
-#             continue
-
-
-def fin(chances):
+def fin(chances, player):
     for i in range(FULL_LINE):
-        print("-", end = "")
+        print("-", end="")
     print()
     print("Game Over")
-    print("Total Number of chances = ", chances)
+    print("Player '{0}' won!".format(player + 1))
+    print("Total Number of chances: ", chances)
     for i in range(FULL_LINE):
-        print("-", end = "")
+        print("-", end="")
     print()
     # sys.exit()
 
+
 global NO_OF_USERS
+
 
 def intro():
     st = "Welcome to battleship game"
     ste = st.center(FULL_LINE, "-")
     print(ste)
     NO_OF_USERS = int(input("Enter number of players: "))
-    NO_OF_SHIPS = int(input("Enter the total number of ships (Max input limit 8): "))
+    NO_OF_SHIPS = int(
+        input("Enter the total number of ships (Max input limit 8): "))
     # NO_OF_SHIPS = int(input("Enter the total number of ships  "))
     print("Number of ships = ", NO_OF_SHIPS)
     # print("Ship Size = ", SHIP_SIZE)
@@ -123,7 +50,8 @@ def intro():
     print("Good Luck!")
     return [NO_OF_SHIPS, NO_OF_USERS]
 
-# # driver
+
+# driver
 ship_list = []
 chances = 0
 user_list = []
@@ -131,50 +59,48 @@ user_list = []
 
 for user in range(NO_OF_USERS):
     user_list.append(battleShipUser(NO_OF_SHIPS))
-    
-    
+
+# for dramu in range(NO_OF_USERS):
+#     POS_INDICATOR = 10
+#     for i in range(POS_INDICATOR):
+#         print("   |", i, end="")
+#     print("   |")
+#     k = 0
+#     for i in range(ROW_SIZE):
+#         print(k, end="")
+#         for j in range(COL_SIZE):
+#             print("  |  " + str(user_list[dramu].grid[i][j]), end="")
+#         print("  |")
+#         k += 1
+
 
 # POS_INDICATOR = 10
-# for i in range(POS_INDICATOR): 
-#     print("   |" , i , end = "")
+# for i in range(POS_INDICATOR):
+#     print("   |", i, end="")
 # print("   |")
 # k = 0
 # for i in range(ROW_SIZE):
 #     print(k, end="")
 #     for j in range(COL_SIZE):
-#         print("  |  " + str(grid[i][j]) , end = "")
+#         print("  |  " + str(user_list[1].grid[i][j]), end="")
 #     print("  |")
 #     k += 1
 
-print(user_list[0].ship_list)
-
-player = 0
+# print(user_list[0].ship_list)
+iterator = cycle(range(NO_OF_USERS))
+player = next(iterator)
 while True:
-    if(player == 0):
-        print("Player 1")
-        user_list[player].input_cord.append(user_list[player].get_input())
-        os.system('clear')
-        user_list[player].chances += 1
-        user_list[player].validate(user_list[player].input_cord)
-        for temp_ship in ship_list:
-            if(not temp_ship.sunk):
-                temp_ship.change_health(user_list[player].input_cord)
-                temp_ship.check_health()
-        if(user_list[player].check_game_status(user_list[player].ship_list)):
-            fin(user_list[player].chances)
-            break
-        player = 1
-    elif(player == 1):
-        print("Player 2")
-        user_list[player].input_cord.append(user_list[player].get_input())
-        os.system('clear')
-        user_list[player].chances += 1
-        user_list[player].validate(user_list[player].input_cord)
-        for temp_ship in ship_list:
-            if(not temp_ship.sunk):
-                temp_ship.change_health(user_list[player].input_cord)
-                temp_ship.check_health()
-        if(user_list[player].check_game_status(user_list[player].ship_list)):
-            fin(user_list[player].chances)
-            break
-        player = 0
+    print("Player {0}".format(int(player) + 1))
+    input_cord = user_list[player].get_input()
+    # os.system('clear')
+    user_list[player].chances += 1
+    user_list[player].validate(input_cord)
+    for temp_ship in user_list[player].ship_list:
+        if(not temp_ship.sunk):
+            temp_ship.change_health(input_cord)
+            user_list[player].sunk_ctr = temp_ship.check_health(
+                user_list[player].sunk_ctr)
+    if(user_list[player].check_game_status(user_list[player].ship_list)):
+        fin(user_list[player].chances, player)
+        break
+    player = next(iterator)
