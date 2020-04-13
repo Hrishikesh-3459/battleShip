@@ -4,8 +4,8 @@ import sys
 import os
 import mysql.connector
 import time
+import datetime
 
-start_time = time.time()
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -14,7 +14,7 @@ mydb = mysql.connector.connect(
     database="mydatabase"
 )
 
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(buffered=True)
 
 
 COL_SIZE = 10
@@ -36,20 +36,31 @@ def fin(chances, player):
     print("Game Over")
     print("Player '{0}' won!".format(player + 1))
     print("Total Number of chances: ", chances)
-    print("Total time taken  = ", (time.time() - start_time), " seconds")
-    # for j in range(NO_OF_USERS):
-    #     user_name.append(input("Enter name of user "))
-    #     for user in user_name:
-    #         sql = "INSERT INTO players (name,score) VALUES (%s)(%s)"
-    #         val = [(user, chances)]
-    #     mycursor.execute(sql, val)
-    sql1 = "INSERT INTO players (score) VALUES (%s)"
-    val1 = [(chances)]
-    mycursor.execute(sql1, val1)
+    inp_name = input("Please enter winner's name: ")
+    mycursor.execute("SELECT name FROM users")
+    myresult = mycursor.fetchall()
+    print(myresult)
+    if(inp_name not in myresult):
+        mycursor.execute("INSERT INTO users (name) VALUES (%s)", (inp_name,))
+        mydb.commit()
+    mycursor.execute(
+        "SELECT user_id FROM users WHERE name = %s", (inp_name,))
+    user_id = mycursor.fetchone()
+    user_id_val = user_id[0]
+    print(user_id)
+    ts = time.time()
+    timestamp = datetime.datetime.fromtimestamp(
+        ts).strftime('%Y-%m-%d %H:%M:%S')
+    sql = "INSERT INTO score_Card (user_id,name,score,date_time) VALUES (%s,%s,%s,%s)"
+    val = (user_id_val, inp_name, chances, timestamp)
+    mycursor.execute(sql, val)
     mydb.commit()
     for i in range(FULL_LINE):
         print("-", end="")
     print()
+    mycursor.execute("SELECT name FROM users")
+    myresult = mycursor.fetchall()
+    print(myresult)
     # sys.exit()
 
 
@@ -82,15 +93,6 @@ def intro():
     print(" 'H' indicates hits")
     print(" '-' indicates misses")
     print("The ships are either horizontal or vertical,\nThey are not diagonal.")
-    for j in range(NO_OF_USERS):
-        user_name.append(input("Enter name of user "))
-        for user in user_name:
-            sql = "INSERT INTO players (name) VALUES (%s)"
-            val = [(user)]
-        mycursor.execute(sql, val)
-    # mydb.commit()
-    # mycursor.execute(sql, val)
-    # mydb.commit()
     print("Sink Them All!")
     print("Good Luck!")
     print_board(Board)

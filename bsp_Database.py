@@ -8,3 +8,6 @@ mydb = mysql.connector.connect(
 )
 
 mycursor = mydb.cursor()
+
+mycursor.execute(
+    "CREATE TABLE score_card (user_id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255))")
