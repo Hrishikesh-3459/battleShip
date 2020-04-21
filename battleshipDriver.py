@@ -10,7 +10,7 @@ import datetime
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    passwd="RamuSQL#123kaka",
+    passwd="Ramukaka",
     database="mydatabase"
 )
 
@@ -39,12 +39,15 @@ def fin(chances, player):
     inp_name = input("Please enter winner's name: ")
     mycursor.execute("SELECT name FROM users")
     myresult = mycursor.fetchall()
-    print(myresult)
-    if(inp_name not in myresult):
+    # print(myresult)
+    myres = []
+    for item in myresult:
+        myres.append(item[0])
+    if(inp_name not in myres):
         mycursor.execute("INSERT INTO users (name) VALUES (%s)", (inp_name,))
         mydb.commit()
     mycursor.execute(
-        "SELECT user_id FROM users WHERE name = %s", (inp_name,))
+        "SELECT user_id FROM users WHERE name = (%s)", (inp_name,))
     user_id = mycursor.fetchone()
     user_id_val = user_id[0]
     print(user_id)
@@ -59,7 +62,7 @@ def fin(chances, player):
         print("-", end="")
     print()
     mycursor.execute("SELECT name FROM users")
-    myresult = mycursor.fetchall()
+    myresult = mycursor.fetchone()
     print(myresult)
     # sys.exit()
 
