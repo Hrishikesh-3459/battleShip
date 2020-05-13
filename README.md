@@ -1,2 +1,1 @@
-# battleShip
-Battleship game using python
+## Welcome to Battleship game
