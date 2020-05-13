@@ -3,7 +3,7 @@ import mysql.connector
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    passwd="RamuSQL#123kaka",
+    passwd="Ramukaka",
     database="mydatabase"
 )
 
