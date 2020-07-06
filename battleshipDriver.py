@@ -8,6 +8,7 @@ from dbConfig import dbMysql
 import mysql.connector
 from tabulate import tabulate
 
+# Setup for mysql
 db = dbMysql()
 mydb = db.connection()
 mycursor = mydb.cursor(buffered=True)
@@ -20,10 +21,12 @@ NO_OF_SHIPS = 0
 
 FULL_LINE = 190
 
+# Grid is the 2 dimensional list, for backend reference, to determine the locations of ships
 grid = [[0] * COL_SIZE for j in range(ROW_SIZE)]
+# Board if the 2 dimensional list, for the user, which displays the curretnt status of the game
 board = [["*"] * COL_SIZE for j in range(ROW_SIZE)]
 
-
+# Function which is called when the game has ended
 def fin(chances, player):
     for i in range(FULL_LINE):
         print("-", end="")
@@ -31,15 +34,22 @@ def fin(chances, player):
     print("Game Over")
     print("Player '{0}' won!".format(player + 1))
     print("Total Number of chances: ", chances)
+    
+    # Prompting the user to input name, to be entered the database
     inp_name = input("Please enter winner's name: ")
     mycursor.execute("SELECT name FROM users")
     myresult = mycursor.fetchall()
     myres = []
     for item in myresult:
         myres.append(item[0])
+        
+        
+    # Inserting the user in the "user table" only if it not already present
     if(inp_name not in myres):
         mycursor.execute("INSERT INTO users (name) VALUES (%s)", (inp_name,))
         mydb.commit()
+        
+    # Inserting the details of the current game to the "score_card" table
     mycursor.execute(
         "SELECT user_id FROM users WHERE name = (%s)", (inp_name,))
     user_id = mycursor.fetchone()
@@ -51,9 +61,12 @@ def fin(chances, player):
     val = (user_id_val, inp_name, chances, timestamp)
     mycursor.execute(sql, val)
     mydb.commit()
+    
     for i in range(FULL_LINE):
         print("-", end="")
     print()
+    
+    # Printing the leaderboard
     mycursor.execute(
         "SELECT * FROM score_card ORDER BY score")
     scores = mycursor.fetchall()
@@ -62,7 +75,7 @@ def fin(chances, player):
 
 global NO_OF_USERS
 
-
+# Function to display the introductory information to the user
 def intro():
     Board = [["*"] * COL_SIZE for j in range(ROW_SIZE)]
     st = "Welcome to battleship game"
@@ -105,6 +118,7 @@ for user in range(NO_OF_USERS):
 
 
 # Print to see answers
+
 # for dramu in range(NO_OF_USERS):
 #     POS_INDICATOR = 10
 #     for i in range(POS_INDICATOR):
