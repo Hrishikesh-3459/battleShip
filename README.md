@@ -50,6 +50,6 @@ In general
 
 * [Python](https://www.python.org/) - Programming Language used
 
-## Authors
+## Author
 
 * **Hrishikesh Mulkutkar**
