@@ -10,7 +10,7 @@ import datetime
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    passwd="Ramukaka",
+    passwd=<<your_password>>,
     database="mydatabase"
 )
 
