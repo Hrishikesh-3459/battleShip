@@ -2,20 +2,24 @@ from itertools import cycle
 from battleShipUser import *
 import sys
 import os
-import mysql.connector
 import time
 import datetime
+from dbConfig import dbMysql
+import mysql.connector
+from tabulate import tabulate
 
-
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd=<<your_password>>,
-    database="mydatabase"
-)
-
+# mydb = mysql.connector.connect(
+#     host="localhost",
+#     user="root",
+#     passwd="Ramukaka",
+#     database="mydatabase"
+# )
+db = dbMysql()
+mydb = db.connection()
 mycursor = mydb.cursor(buffered=True)
+db.configure_db(mycursor)
 
+# mycursor = mydb.cursor(buffered=True)
 
 COL_SIZE = 10
 ROW_SIZE = 10
@@ -23,7 +27,6 @@ os.system('clear')
 NO_OF_SHIPS = 0
 
 FULL_LINE = 190
-# NO_OF_USERS = 0
 
 grid = [[0] * COL_SIZE for j in range(ROW_SIZE)]
 board = [["*"] * COL_SIZE for j in range(ROW_SIZE)]
@@ -50,7 +53,7 @@ def fin(chances, player):
         "SELECT user_id FROM users WHERE name = (%s)", (inp_name,))
     user_id = mycursor.fetchone()
     user_id_val = user_id[0]
-    print(user_id)
+    # print(user_id)
     ts = time.time()
     timestamp = datetime.datetime.fromtimestamp(
         ts).strftime('%Y-%m-%d %H:%M:%S')
@@ -61,12 +64,18 @@ def fin(chances, player):
     for i in range(FULL_LINE):
         print("-", end="")
     print()
-    mycursor.execute("SELECT name FROM users")
-    myresult = mycursor.fetchone()
-    print(myresult)
+    # mycursor.execute("SELECT name FROM users")
+    # myresult = mycursor.fetchone()
+    # print(myresult)
     # sys.exit()
+    mycursor.execute(
+        "SELECT * FROM score_card ORDER BY score")
+    scores = mycursor.fetchall()
+    print(tabulate(scores, headers=[
+          "Serial No", "User Id", "Name", "Score", "Date and Time"], tablefmt="fancy_grid"))
 
 
+# DELETE FROM Customers WHERE CustomerName='Alfreds Futterkiste';
 global NO_OF_USERS
 
 
