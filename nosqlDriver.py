@@ -12,12 +12,13 @@ os.system('clear')
 NO_OF_SHIPS = 0
 
 FULL_LINE = 190
-# NO_OF_USERS = 0
 
+# Grid is the 2 dimensional list, for backend reference, to determine the locations of ships
 grid = [[0] * COL_SIZE for j in range(ROW_SIZE)]
+# Board if the 2 dimensional list, for the user, which displays the curretnt status of the game
 board = [["*"] * COL_SIZE for j in range(ROW_SIZE)]
 
-
+# Function which is called when the game has ended
 def fin(chances, player):
     for i in range(FULL_LINE):
         print("-", end="")
@@ -28,18 +29,12 @@ def fin(chances, player):
     for i in range(FULL_LINE):
         print("-", end="")
     print()
-    # mycursor.execute("SELECT name FROM users")
-    # myresult = mycursor.fetchone()
-    # print(myresult)
-    # sys.exit()
 
 
 global NO_OF_USERS
 
-
+# Function to display the introductory information to the user
 def intro():
-    # mycursor = mydb.cursor()
-    # user_name = ""
     Board = [["*"] * COL_SIZE for j in range(ROW_SIZE)]
     st = "Welcome to battleship game"
     ste = st.center(FULL_LINE, "-")
@@ -58,7 +53,6 @@ def intro():
         except ValueError:
             print("Oops!  That was not a valid number.  Try again...")
     print("Number of ships = ", NO_OF_SHIPS)
-    # print("Ship Size = ", SHIP_SIZE)
     print(" '*' indicate unexplored coordinates")
     print(" 'H' indicates hits")
     print(" '-' indicates misses")
@@ -80,7 +74,8 @@ user_name = []
 for user in range(NO_OF_USERS):
     user_list.append(battleShipUser(NO_OF_SHIPS))
 
-
+# To print the answer
+  
 # for dramu in range(NO_OF_USERS):
 #     POS_INDICATOR = 10
 #     for i in range(POS_INDICATOR):
