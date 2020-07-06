@@ -9,7 +9,7 @@ FULL_LINE = 190
 
 
 class battleShipUser:
-
+    
     def __init__(self, NO_OF_SHIPS):
         self.ship_list = []
         self.chances = 0
@@ -17,18 +17,18 @@ class battleShipUser:
         self.grid = [[0] * COL_SIZE for j in range(ROW_SIZE)]
         self.board = [["*"] * COL_SIZE for j in range(ROW_SIZE)]
         self.create_ships(NO_OF_SHIPS)
-
+        
+    # Creates ships at random, non-overlapping location in the grid
     def create_ships(self, NO_OF_SHIPS):
         for ship in range(NO_OF_SHIPS):
             [location, orientation] = self.get_location()
-            # print(location)
-            # print(orientation)
             temp_ship = Ship(location, orientation, SHIP_SIZE)
             self.ship_list.append(temp_ship)
             for i in range(SHIP_SIZE):
                 self.grid[temp_ship.coordinates[i]['row']
                           ][temp_ship.coordinates[i]['column']] = 1
-
+                
+    # Checks if there is already a ship at the given location
     def check_location(self, location, orientation):
         if(orientation == "Vertical"):
             for i in range(SHIP_SIZE):
@@ -39,7 +39,8 @@ class battleShipUser:
                 if(self.grid[location['row']][location['column'] + i] == 1):
                     return False
         return True
-
+    
+    # Gets the location of the ships from the "create_ships" function
     def get_location(self):
         while True:
             location = {}
@@ -51,14 +52,16 @@ class battleShipUser:
                 return [location, orientation]
             else:
                 continue
-
+                
+    # Checks if the input is already given
     def check_input(self, input_cord):
         if(self.board[input_cord["row"]][input_cord["column"]] != "*"):
             print("Oops.. input already given. Enter new coordinates")
             return False
         else:
             return True
-
+        
+    # Prompts the user to provide row and column co-ordinates
     def get_input(self):
         while True:
             try:
@@ -75,7 +78,8 @@ class battleShipUser:
                 print("Oops!  That was not a valid number.  Try again...")
             except (IndexError):
                 print("Oops!  That was out of limits.  Try again...")
-
+    
+    # Checking if there is a ship at the input co-ordinate
     def validate(self, input_cord):
         FLAG = False
         for ship in self.ship_list:
@@ -90,6 +94,7 @@ class battleShipUser:
             print_board(self.board)
             print("MISS...")
 
+    # Analysing the current status of the game, to determine if the game has ended or not.
     def check_game_status(self, ship_list):
         GAME_OVER = True
         for ship in self.ship_list:
@@ -97,7 +102,7 @@ class battleShipUser:
                 GAME_OVER = False
         return GAME_OVER
 
-
+# Printing the user-board to the output, after every move
 def print_board(board):
     BORDER = 64
     POS_INDICATOR = 10
