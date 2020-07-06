@@ -8,18 +8,10 @@ from dbConfig import dbMysql
 import mysql.connector
 from tabulate import tabulate
 
-# mydb = mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     passwd="Ramukaka",
-#     database="mydatabase"
-# )
 db = dbMysql()
 mydb = db.connection()
 mycursor = mydb.cursor(buffered=True)
 db.configure_db(mycursor)
-
-# mycursor = mydb.cursor(buffered=True)
 
 COL_SIZE = 10
 ROW_SIZE = 10
@@ -42,7 +34,6 @@ def fin(chances, player):
     inp_name = input("Please enter winner's name: ")
     mycursor.execute("SELECT name FROM users")
     myresult = mycursor.fetchall()
-    # print(myresult)
     myres = []
     for item in myresult:
         myres.append(item[0])
@@ -53,7 +44,6 @@ def fin(chances, player):
         "SELECT user_id FROM users WHERE name = (%s)", (inp_name,))
     user_id = mycursor.fetchone()
     user_id_val = user_id[0]
-    # print(user_id)
     ts = time.time()
     timestamp = datetime.datetime.fromtimestamp(
         ts).strftime('%Y-%m-%d %H:%M:%S')
@@ -64,24 +54,16 @@ def fin(chances, player):
     for i in range(FULL_LINE):
         print("-", end="")
     print()
-    # mycursor.execute("SELECT name FROM users")
-    # myresult = mycursor.fetchone()
-    # print(myresult)
-    # sys.exit()
     mycursor.execute(
         "SELECT * FROM score_card ORDER BY score")
     scores = mycursor.fetchall()
     print(tabulate(scores, headers=[
           "Serial No", "User Id", "Name", "Score", "Date and Time"], tablefmt="fancy_grid"))
 
-
-# DELETE FROM Customers WHERE CustomerName='Alfreds Futterkiste';
 global NO_OF_USERS
 
 
 def intro():
-    # mycursor = mydb.cursor()
-    # user_name = ""
     Board = [["*"] * COL_SIZE for j in range(ROW_SIZE)]
     st = "Welcome to battleship game"
     ste = st.center(FULL_LINE, "-")
@@ -100,7 +82,6 @@ def intro():
         except ValueError:
             print("Oops!  That was not a valid number.  Try again...")
     print("Number of ships = ", NO_OF_SHIPS)
-    # print("Ship Size = ", SHIP_SIZE)
     print(" '*' indicate unexplored coordinates")
     print(" 'H' indicates hits")
     print(" '-' indicates misses")
@@ -123,22 +104,19 @@ for user in range(NO_OF_USERS):
     user_list.append(battleShipUser(NO_OF_SHIPS))
 
 
-# mycursor.execute(sql, val)
-# mydb.commit()
-
-
-for dramu in range(NO_OF_USERS):
-    POS_INDICATOR = 10
-    for i in range(POS_INDICATOR):
-        print("   |", i, end="")
-    print("   |")
-    k = 0
-    for i in range(ROW_SIZE):
-        print(k, end="")
-        for j in range(COL_SIZE):
-            print("  |  " + str(user_list[dramu].grid[i][j]), end="")
-        print("  |")
-        k += 1
+# Print to see answers
+# for dramu in range(NO_OF_USERS):
+#     POS_INDICATOR = 10
+#     for i in range(POS_INDICATOR):
+#         print("   |", i, end="")
+#     print("   |")
+#     k = 0
+#     for i in range(ROW_SIZE):
+#         print(k, end="")
+#         for j in range(COL_SIZE):
+#             print("  |  " + str(user_list[dramu].grid[i][j]), end="")
+#         print("  |")
+#         k += 1
 
 
 iterator = cycle(range(NO_OF_USERS))
