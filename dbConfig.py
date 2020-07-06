@@ -3,9 +3,9 @@ import mysql.connector
 
 class dbMysql():
     def __init__(self):
-        self.pwd = "Ramukaka"
-        self.username = "root"
-        self.host = "localhost"
+        self.pwd = <<Your password>>
+        self.username = <<Your Username>>
+        self.host = <<Your Host>>
         self.database = "mydatabase"
         self.mydb = None
 
@@ -17,7 +17,8 @@ class dbMysql():
             database=self.database
         )
         return(self.mydb)
-
+    
+    # Creating tables only if they don't exist 
     def configure_db(self, mycursor):
         mycursor.execute("CREATE DATABASE IF NOT EXISTS mydatabase")
         self.mydb.commit()
