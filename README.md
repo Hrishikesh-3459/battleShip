@@ -69,3 +69,21 @@ In general
 ### Start
 
 ![Start](https://user-images.githubusercontent.com/51927760/86593210-6e125300-bfb2-11ea-9ec4-e38dd8257103.png)
+
+### Running 
+
+![Running](https://user-images.githubusercontent.com/51927760/86595543-84baa900-bfb6-11ea-8726-b3120f9340d8.png)
+
+### Database
+
+![Database](https://user-images.githubusercontent.com/51927760/86595570-8b492080-bfb6-11ea-909c-9724224e8ae8.png)
+
+## Built with
+
+* [Python](https://www.python.org/) - Programming Language used
+
+* [MySQL](https://www.mysql.com/) - Database Management 
+
+## Author
+
+* **Hrishikesh Mulkutkar**
